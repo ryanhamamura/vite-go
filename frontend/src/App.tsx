@@ -8,6 +8,9 @@ import AirTrackPro from './pages/AirTrackPro'
 import ProcessFlow from './pages/ProcessFlow'
 import ArmsVault from './pages/ArmsVault'
 
+// Components
+import ClassificationBanner from './components/ClassificationBanner'
+
 function App() {
   const [theme, setTheme] = useState('custom')
   
@@ -20,7 +23,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="min-h-screen bg-base-100 flex flex-col">
+      {/* Top Classification Banner */}
+      <ClassificationBanner />
+      
       {/* Navigation */}
       <div className="navbar bg-base-200">
         <div className="navbar-start">
@@ -73,12 +79,15 @@ function App() {
         </div>
       </div>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/airtrack-pro" element={<AirTrackPro />} />
-        <Route path="/processflow" element={<ProcessFlow />} />
-        <Route path="/armsvault" element={<ArmsVault />} />
-      </Routes>
+      {/* Main Content */}
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/airtrack-pro" element={<AirTrackPro />} />
+          <Route path="/processflow" element={<ProcessFlow />} />
+          <Route path="/armsvault" element={<ArmsVault />} />
+        </Routes>
+      </div>
 
       {/* Footer */}
       <footer className="footer p-10 bg-neutral text-neutral-content">
@@ -105,6 +114,9 @@ function App() {
           <a className="link link-hover">Cookie Policy</a> 
         </nav>
       </footer>
+
+      {/* Bottom Classification Banner */}
+      <ClassificationBanner />
     </div>
   )
 }
