@@ -635,31 +635,20 @@ function ArmsVault() {
                 <div className="bg-base-200 p-6 rounded-box shadow mb-6">
                   <h2 className="text-xl font-bold mb-4">Record New Transaction</h2>
                   
-                  <div className="tabs tabs-boxed mb-4">
-                    <a 
-                      className={`tab ${transactionType === 'Gain' ? 'tab-active' : ''}`}
-                      onClick={() => setTransactionType('Gain')}
+                  <div className="form-control w-full mb-4">
+                    <label className="label">
+                      <span className="label-text">Transaction Type</span>
+                    </label>
+                    <select 
+                      className="select select-bordered w-full"
+                      value={transactionType}
+                      onChange={(e) => setTransactionType(e.target.value)}
                     >
-                      Gain
-                    </a>
-                    <a 
-                      className={`tab ${transactionType === 'Expenditure' ? 'tab-active' : ''}`}
-                      onClick={() => setTransactionType('Expenditure')}
-                    >
-                      Expenditure
-                    </a>
-                    <a 
-                      className={`tab ${transactionType === 'Transfer' ? 'tab-active' : ''}`}
-                      onClick={() => setTransactionType('Transfer')}
-                    >
-                      Transfer
-                    </a>
-                    <a 
-                      className={`tab ${transactionType === 'Other Loss' ? 'tab-active' : ''}`}
-                      onClick={() => setTransactionType('Other Loss')}
-                    >
-                      Other Loss
-                    </a>
+                      <option value="Gain">Gain</option>
+                      <option value="Expenditure">Expenditure</option>
+                      <option value="Transfer">Transfer</option>
+                      <option value="Other Loss">Other Loss</option>
+                    </select>
                   </div>
                   
                   {formSubmitted && (
