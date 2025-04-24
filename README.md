@@ -5,6 +5,10 @@ This project demonstrates how to serve a React/TypeScript frontend built with Vi
 ## Project Structure
 
 - `frontend/`: React TypeScript application built with Vite
+  - `src/`: Source code for the React application
+    - `components/`: Reusable UI components
+    - `pages/`: Page components for different routes
+  - `public/`: Static assets
 - `backend/`: Go backend server that serves the static files
   - `pkg/`: Package directory for Go components
     - `container/`: Application container for dependency injection
@@ -15,8 +19,37 @@ This project demonstrates how to serve a React/TypeScript frontend built with Vi
     - `services/`: (Future) Business logic layer
 - `backend/dist/`: (Generated) Build output from the frontend
 
+## Features
+
+### Frontend
+
+- **React Router Navigation**: Multi-page application with clean URL paths
+- **Product Pages**: Detailed information for each product offering
+- **Security Classification Banners**: Dynamic banners that change based on page content
+- **Responsive Design**: Works on mobile, tablet, and desktop devices
+- **Dark/Light Mode Toggle**: User-selectable theme
+- **ArmsVault Inventory Management**:
+  - Dashboard overview with key metrics
+  - Storage location management
+  - Transaction tracking (gains, expenditures, transfers)
+  - Reporting system
+
+### Backend
+
+- **Container Pattern**: Structured Go backend with dependency injection
+- **Static File Serving**: Embedded frontend build in Go binary
+- **API Routes**: (Future) RESTful API endpoints for the frontend
+
 ## Recent Changes
 
+- Implemented ArmsVault inventory management system
+  - Added storage location management functionality
+  - Added transaction management for tracking inventory movements
+  - Added reporting system for inventory analysis
+- Added React Router for multi-page navigation
+  - Created product detail pages for AirTrack Pro, ProcessFlow, and ArmsVault
+  - Implemented client-side routing
+- Added security classification banners that change based on page content
 - Implemented container pattern for the Go backend
   - Added go-chi for HTTP routing
   - Structured code with handlers, server, and container packages
@@ -132,3 +165,10 @@ r.Handle("/*", http.FileServer(http.FS(fsys)))
 ```
 
 The container pattern allows for better separation of concerns and easier testing by using dependency injection to wire up the components. This structure also makes it easier to add new functionality as the application grows.
+
+## Future Enhancements
+
+- Add backend API endpoints for ArmsVault data persistence
+- Implement user authentication and authorization
+- Add real-time updates using WebSockets
+- Create mobile application using React Native
