@@ -1,22 +1,53 @@
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 
+// Types
+interface Location {
+  id: number
+  name: string
+  type: string
+  capacity: number
+  currentCount: number
+}
+
+interface Transaction {
+  id: number
+  date: string
+  type: string
+  location: string
+  destination?: string
+  item: string
+  quantity: number
+  reason?: string
+  source?: string
+  user: string
+}
+
+interface InventoryItem {
+  id: number
+  name: string
+  category: string
+  inStock: number
+  allocated: number
+  location: string
+}
+
 // Mock data for demonstration
-const mockLocations = [
+const mockLocations: Location[] = [
   { id: 1, name: 'Main Armory', type: 'Secure Vault', capacity: 500, currentCount: 342 },
   { id: 2, name: 'Alpha Team Locker', type: 'Field Storage', capacity: 50, currentCount: 28 },
   { id: 3, name: 'Training Center', type: 'Range Locker', capacity: 100, currentCount: 72 },
   { id: 4, name: 'Vehicle Bay', type: 'Mobile Storage', capacity: 200, currentCount: 115 }
 ]
 
-const mockTransactions = [
+const initialTransactions: Transaction[] = [
   { id: 1, date: '2025-04-22', type: 'Gain', location: 'Main Armory', item: '5.56mm NATO Rounds', quantity: 5000, user: 'Sgt. Johnson' },
   { id: 2, date: '2025-04-23', type: 'Expenditure', location: 'Training Center', item: '9mm Rounds', quantity: 500, user: 'Lt. Miller' },
   { id: 3, date: '2025-04-23', type: 'Transfer', location: 'Alpha Team Locker', destination: 'Vehicle Bay', item: 'M4 Carbines', quantity: 12, user: 'Cpt. Williams' },
   { id: 4, date: '2025-04-24', type: 'Other Loss', location: 'Main Armory', item: 'Smoke Grenades', quantity: 6, reason: 'Defective', user: 'Sgt. Davis' }
 ]
 
-const mockInventoryItems = [
+const mockInventoryItems: InventoryItem[] = [
   { id: 1, name: 'M4 Carbine', category: 'Weapon', inStock: 120, allocated: 87, location: 'Main Armory' },
   { id: 2, name: '5.56mm NATO Rounds', category: 'Ammunition', inStock: 25000, allocated: 12000, location: 'Main Armory' },
   { id: 3, name: 'M9 Pistol', category: 'Weapon', inStock: 75, allocated: 42, location: 'Main Armory' },
@@ -33,6 +64,92 @@ function ArmsVault() {
   const [showNewTransactionForm, setShowNewTransactionForm] = useState(false)
   const [transactionType, setTransactionType] = useState('Gain')
   const [reportType, setReportType] = useState('Inventory')
+  
+  // Transaction state
+  const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions)
+  const [nextTransactionId, setNextTransactionId] = useState(5)
+  
+  // Transaction form state
+  const [formDate, setFormDate] = useState<string>(new Date().toISOString().split('T')[0])
+  const [formLocation, setFormLocation] = useState<string>('')
+  const [formDestination, setFormDestination] = useState<string>('')
+  const [formItem, setFormItem] = useState<string>('')
+  const [formQuantity, setFormQuantity] = useState<string>('')
+  const [formSource, setFormSource] = useState<string>('')
+  const [formReason, setFormReason] = useState<string>('')
+  const [formNotes, setFormNotes] = useState<string>('')
+  const [formSubmitted, setFormSubmitted] = useState(false)
+  
+  // Add new transaction
+  const handleSubmitTransaction = (e: FormEvent) => {
+    e.preventDefault()
+    
+    if (!formLocation || !formItem || !formQuantity) {
+      alert('Please fill in all required fields')
+      return
+    }
+    
+    // For Transfer type, destination is required
+    if (transactionType === 'Transfer' && !formDestination) {
+      alert('Please select a destination for the transfer')
+      return
+    }
+    
+    // For Other Loss, reason is required
+    if (transactionType === 'Other Loss' && !formReason) {
+      alert('Please provide a reason for the loss')
+      return
+    }
+    
+    const newTransaction: Transaction = {
+      id: nextTransactionId,
+      date: formDate,
+      type: transactionType,
+      location: formLocation,
+      item: formItem,
+      quantity: parseInt(formQuantity),
+      user: 'Current User' // In a real app, this would come from authentication
+    }
+    
+    // Add conditional properties
+    if (transactionType === 'Transfer') {
+      newTransaction.destination = formDestination
+    }
+    
+    if (transactionType === 'Gain') {
+      newTransaction.source = formSource
+    }
+    
+    if (transactionType === 'Other Loss') {
+      newTransaction.reason = formReason
+    }
+    
+    // Add to transactions list
+    setTransactions([newTransaction, ...transactions])
+    setNextTransactionId(nextTransactionId + 1)
+    
+    // Reset form
+    resetTransactionForm()
+    setFormSubmitted(true)
+    
+    // Close form after submission
+    setTimeout(() => {
+      setShowNewTransactionForm(false)
+      setFormSubmitted(false)
+    }, 2000)
+  }
+  
+  // Reset transaction form
+  const resetTransactionForm = () => {
+    setFormDate(new Date().toISOString().split('T')[0])
+    setFormLocation('')
+    setFormDestination('')
+    setFormItem('')
+    setFormQuantity('')
+    setFormSource('')
+    setFormReason('')
+    setFormNotes('')
+  }
   
   return (
     <div className="container mx-auto px-4 py-12">
@@ -70,7 +187,10 @@ function ArmsVault() {
               </button>
               <button 
                 className={`btn ${activeTab === 'transactions' ? 'btn-primary' : 'btn-ghost'} justify-start`}
-                onClick={() => setActiveTab('transactions')}
+                onClick={() => {
+                  setActiveTab('transactions')
+                  resetTransactionForm()
+                }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
@@ -98,12 +218,12 @@ function ArmsVault() {
             </div>
             <div className="stat">
               <div className="stat-title">Transactions Today</div>
-              <div className="stat-value">12</div>
-              <div className="stat-desc">+2 from yesterday</div>
+              <div className="stat-value">{transactions.filter(t => t.date === new Date().toISOString().split('T')[0]).length}</div>
+              <div className="stat-desc">Updated in real-time</div>
             </div>
             <div className="stat">
               <div className="stat-title">Locations</div>
-              <div className="stat-value">4</div>
+              <div className="stat-value">{mockLocations.length}</div>
               <div className="stat-desc">Active storage locations</div>
             </div>
           </div>
@@ -163,7 +283,7 @@ function ArmsVault() {
                         </tr>
                       </thead>
                       <tbody>
-                        {mockTransactions.slice(0, 4).map(transaction => (
+                        {transactions.slice(0, 4).map(transaction => (
                           <tr key={transaction.id}>
                             <td>{transaction.date}</td>
                             <td>
@@ -341,7 +461,10 @@ function ArmsVault() {
                 <h1 className="text-3xl font-bold">Inventory Transactions</h1>
                 <button 
                   className="btn btn-primary"
-                  onClick={() => setShowNewTransactionForm(!showNewTransactionForm)}
+                  onClick={() => {
+                    setShowNewTransactionForm(!showNewTransactionForm)
+                    resetTransactionForm()
+                  }}
                 >
                   {showNewTransactionForm ? 'Cancel' : 'New Transaction'}
                 </button>
@@ -378,22 +501,42 @@ function ArmsVault() {
                     </a>
                   </div>
                   
-                  <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {formSubmitted && (
+                    <div className="alert alert-success mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>Transaction recorded successfully!</span>
+                    </div>
+                  )}
+                  
+                  <form onSubmit={handleSubmitTransaction} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="form-control w-full">
                       <label className="label">
                         <span className="label-text">Date</span>
                       </label>
-                      <input type="date" className="input input-bordered w-full" defaultValue={new Date().toISOString().split('T')[0]} />
+                      <input 
+                        type="date" 
+                        className="input input-bordered w-full" 
+                        value={formDate}
+                        onChange={(e) => setFormDate(e.target.value)}
+                        required
+                      />
                     </div>
                     
                     <div className="form-control w-full">
                       <label className="label">
                         <span className="label-text">Location</span>
                       </label>
-                      <select className="select select-bordered w-full">
-                        <option disabled selected>Select location</option>
+                      <select 
+                        className="select select-bordered w-full"
+                        value={formLocation}
+                        onChange={(e) => setFormLocation(e.target.value)}
+                        required
+                      >
+                        <option value="" disabled>Select location</option>
                         {mockLocations.map(location => (
-                          <option key={location.id}>{location.name}</option>
+                          <option key={location.id} value={location.name}>{location.name}</option>
                         ))}
                       </select>
                     </div>
@@ -403,11 +546,19 @@ function ArmsVault() {
                         <label className="label">
                           <span className="label-text">Destination</span>
                         </label>
-                        <select className="select select-bordered w-full">
-                          <option disabled selected>Select destination</option>
-                          {mockLocations.map(location => (
-                            <option key={location.id}>{location.name}</option>
-                          ))}
+                        <select 
+                          className="select select-bordered w-full"
+                          value={formDestination}
+                          onChange={(e) => setFormDestination(e.target.value)}
+                          required={transactionType === 'Transfer'}
+                        >
+                          <option value="" disabled>Select destination</option>
+                          {mockLocations
+                            .filter(loc => loc.name !== formLocation)
+                            .map(location => (
+                              <option key={location.id} value={location.name}>{location.name}</option>
+                            ))
+                          }
                         </select>
                       </div>
                     )}
@@ -416,10 +567,15 @@ function ArmsVault() {
                       <label className="label">
                         <span className="label-text">Item</span>
                       </label>
-                      <select className="select select-bordered w-full">
-                        <option disabled selected>Select item</option>
+                      <select 
+                        className="select select-bordered w-full"
+                        value={formItem}
+                        onChange={(e) => setFormItem(e.target.value)}
+                        required
+                      >
+                        <option value="" disabled>Select item</option>
                         {mockInventoryItems.map(item => (
-                          <option key={item.id}>{item.name}</option>
+                          <option key={item.id} value={item.name}>{item.name}</option>
                         ))}
                       </select>
                     </div>
@@ -428,15 +584,45 @@ function ArmsVault() {
                       <label className="label">
                         <span className="label-text">Quantity</span>
                       </label>
-                      <input type="number" placeholder="Quantity" className="input input-bordered w-full" min="1" />
+                      <input 
+                        type="number" 
+                        placeholder="Quantity" 
+                        className="input input-bordered w-full" 
+                        min="1"
+                        value={formQuantity}
+                        onChange={(e) => setFormQuantity(e.target.value)}
+                        required
+                      />
                     </div>
                     
-                    {(transactionType === 'Gain' || transactionType === 'Other Loss') && (
+                    {transactionType === 'Gain' && (
                       <div className="form-control w-full">
                         <label className="label">
-                          <span className="label-text">{transactionType === 'Gain' ? 'Source' : 'Reason'}</span>
+                          <span className="label-text">Source</span>
                         </label>
-                        <input type="text" placeholder={transactionType === 'Gain' ? "e.g. Supply Shipment #123" : "e.g. Damaged in training"} className="input input-bordered w-full" />
+                        <input 
+                          type="text" 
+                          placeholder="e.g. Supply Shipment #123" 
+                          className="input input-bordered w-full"
+                          value={formSource}
+                          onChange={(e) => setFormSource(e.target.value)}
+                        />
+                      </div>
+                    )}
+                    
+                    {transactionType === 'Other Loss' && (
+                      <div className="form-control w-full">
+                        <label className="label">
+                          <span className="label-text">Reason</span>
+                        </label>
+                        <input 
+                          type="text" 
+                          placeholder="e.g. Damaged in training" 
+                          className="input input-bordered w-full"
+                          value={formReason}
+                          onChange={(e) => setFormReason(e.target.value)}
+                          required={transactionType === 'Other Loss'}
+                        />
                       </div>
                     )}
                     
@@ -444,12 +630,23 @@ function ArmsVault() {
                       <label className="label">
                         <span className="label-text">Notes</span>
                       </label>
-                      <textarea className="textarea textarea-bordered h-24" placeholder="Additional details about this transaction"></textarea>
+                      <textarea 
+                        className="textarea textarea-bordered h-24" 
+                        placeholder="Additional details about this transaction"
+                        value={formNotes}
+                        onChange={(e) => setFormNotes(e.target.value)}
+                      />
                     </div>
                     
                     <div className="md:col-span-2 flex justify-end gap-2 mt-2">
-                      <button type="button" className="btn" onClick={() => setShowNewTransactionForm(false)}>Cancel</button>
-                      <button type="button" className="btn btn-primary">Record Transaction</button>
+                      <button 
+                        type="button" 
+                        className="btn" 
+                        onClick={() => setShowNewTransactionForm(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button type="submit" className="btn btn-primary">Record Transaction</button>
                     </div>
                   </form>
                 </div>
@@ -525,7 +722,7 @@ function ArmsVault() {
                     </tr>
                   </thead>
                   <tbody>
-                    {mockTransactions.map(transaction => (
+                    {transactions.map(transaction => (
                       <tr key={transaction.id}>
                         <td>{transaction.date}</td>
                         <td>
@@ -545,7 +742,7 @@ function ArmsVault() {
                   </tbody>
                 </table>
                 <div className="p-4 flex justify-between">
-                  <span className="text-sm">Showing 4 of 248 transactions</span>
+                  <span className="text-sm">Showing {transactions.length} transactions</span>
                   <div className="join">
                     <button className="join-item btn btn-sm">«</button>
                     <button className="join-item btn btn-sm btn-active">1</button>
