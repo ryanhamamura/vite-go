@@ -1,0 +1,21 @@
+/* Custom styles - most styling uses Tailwind/DaisyUI classes */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  img[src*='react.svg'] {
+    animation: logo-spin infinite 20s linear;
+  }
+}
