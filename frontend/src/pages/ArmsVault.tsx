@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 
 // Types
@@ -31,6 +31,93 @@ interface InventoryItem {
   allocated: number
   location: string
 }
+
+// API Service Interface (for future implementation)
+/*
+interface ApiResponse<T> {
+  data: T
+  status: 'success' | 'error'
+  message?: string
+}
+
+// Service for handling API transactions
+const transactionService = {
+  // Get all transactions with optional filtering
+  async getTransactions(filters?: Record<string, any>): Promise<ApiResponse<Transaction[]>> {
+    try {
+      const queryParams = filters ? `?${new URLSearchParams(filters).toString()}` : ''
+      const response = await fetch(`/api/transactions${queryParams}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch transactions')
+      }
+      
+      const data = await response.json()
+      return { status: 'success', data }
+    } catch (error) {
+      console.error('Error fetching transactions:', error)
+      return { status: 'error', data: [], message: 'Failed to load transactions' }
+    }
+  },
+  
+  // Get transaction by ID
+  async getTransactionById(id: number): Promise<ApiResponse<Transaction>> {
+    try {
+      const response = await fetch(`/api/transactions/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch transaction')
+      }
+      
+      const data = await response.json()
+      return { status: 'success', data }
+    } catch (error) {
+      console.error(`Error fetching transaction #${id}:`, error)
+      return { 
+        status: 'error', 
+        data: {} as Transaction, 
+        message: 'Failed to load transaction details' 
+      }
+    }
+  },
+  
+  // Create a new transaction
+  async createTransaction(transaction: Omit<Transaction, 'id'>): Promise<ApiResponse<Transaction>> {
+    try {
+      const response = await fetch('/api/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(transaction)
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to create transaction')
+      }
+      
+      const data = await response.json()
+      return { status: 'success', data }
+    } catch (error) {
+      console.error('Error creating transaction:', error)
+      return { 
+        status: 'error', 
+        data: {} as Transaction, 
+        message: 'Failed to save transaction' 
+      }
+    }
+  }
+}
+*/
 
 // Mock data for demonstration
 const mockLocations: Location[] = [
@@ -68,6 +155,7 @@ function ArmsVault() {
   // Transaction state
   const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions)
   const [nextTransactionId, setNextTransactionId] = useState(5)
+  const [isLoading, setIsLoading] = useState(false)
   
   // Transaction form state
   const [formDate, setFormDate] = useState<string>(new Date().toISOString().split('T')[0])
@@ -80,8 +168,41 @@ function ArmsVault() {
   const [formNotes, setFormNotes] = useState<string>('')
   const [formSubmitted, setFormSubmitted] = useState(false)
   
+  // For API integration (uncomment when API is ready)
+  /*
+  // Fetch transactions from API when component mounts
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      setIsLoading(true)
+      
+      try {
+        // Fetch transactions from API
+        const response = await fetch('/api/transactions', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch transactions')
+        }
+        
+        const data = await response.json()
+        setTransactions(data)
+      } catch (error) {
+        console.error('Error fetching transactions:', error)
+        // Handle error state
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    
+    fetchTransactions()
+  }, [])
+  */
+  
   // Add new transaction
-  const handleSubmitTransaction = (e: FormEvent) => {
+  const handleSubmitTransaction = async (e: FormEvent) => {
     e.preventDefault()
     
     if (!formLocation || !formItem || !formQuantity) {
@@ -124,7 +245,47 @@ function ArmsVault() {
       newTransaction.reason = formReason
     }
     
-    // Add to transactions list
+    // *** API INTEGRATION - POST NEW TRANSACTION ***
+    /* 
+    // This would be uncommented and implemented when the backend API is ready
+    try {
+      // Show loading state
+      // setIsLoading(true)
+      
+      // Send transaction data to API
+      const response = await fetch('/api/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + userToken // Authentication token would be used here
+        },
+        body: JSON.stringify(newTransaction)
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to save transaction')
+      }
+      
+      // Get the saved transaction with server-generated ID
+      const savedTransaction = await response.json()
+      
+      // Update transactions list with the server response
+      setTransactions([savedTransaction, ...transactions])
+      
+      // Hide loading state and show success
+      // setIsLoading(false)
+      setFormSubmitted(true)
+      
+    } catch (error) {
+      // Handle error state
+      console.error('Error saving transaction:', error)
+      alert('Failed to save transaction. Please try again.')
+      // setIsLoading(false)
+      return
+    }
+    */
+    
+    // This is the client-side only implementation (remove when API is integrated)
     setTransactions([newTransaction, ...transactions])
     setNextTransactionId(nextTransactionId + 1)
     
