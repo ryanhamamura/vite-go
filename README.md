@@ -42,8 +42,17 @@ make build-frontend
 # Build just the backend
 make build-backend
 
-# Run the server
+# Run the server (production mode)
 make run
+
+# Run frontend and backend in development mode
+make dev
+
+# Run just the frontend dev server
+make dev-frontend
+
+# Run just the backend in development mode
+make dev-backend
 
 # Clean build artifacts
 make clean
@@ -51,7 +60,7 @@ make clean
 
 ## Manual Instructions
 
-### Build the Frontend
+### Build the Frontend (Production)
 
 ```bash
 cd frontend
@@ -59,7 +68,7 @@ npm install
 npm run build
 ```
 
-### Run the Backend
+### Run the Backend (Production)
 
 ```bash
 cd backend
@@ -67,6 +76,24 @@ go run main.go
 ```
 
 Visit `http://localhost:8180` to see the app.
+
+### Development Mode
+
+For development with hot module reloading:
+
+```bash
+# In terminal 1
+cd backend
+go run main.go
+
+# In terminal 2
+cd frontend
+npm run dev
+```
+
+Visit `http://localhost:5173` for the frontend with HMR enabled.
+
+The frontend is configured to proxy API requests to the backend server running on port 8180.
 
 ## How It Works
 
