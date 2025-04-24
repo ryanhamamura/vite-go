@@ -29,7 +29,11 @@ const classificationMap: Record<string, ClassificationInfo> = {
   }
 }
 
-function ClassificationBanner() {
+interface ClassificationBannerProps {
+  position: 'top' | 'bottom'
+}
+
+function ClassificationBanner({ position }: ClassificationBannerProps) {
   const location = useLocation()
   const currentPath = location.pathname
   
@@ -42,7 +46,9 @@ function ClassificationBanner() {
   const classification = classificationMap[currentPath] || defaultClassification
   
   return (
-    <div className={`${classification.bgColor} ${classification.textColor} py-1 text-center font-bold sticky z-50`}>
+    <div 
+      className={`${classification.bgColor} ${classification.textColor} py-1 text-center font-bold fixed w-full ${position === 'top' ? 'top-0' : 'bottom-0'} z-50`}
+    >
       {classification.text}
     </div>
   )
