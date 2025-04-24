@@ -42,6 +42,11 @@ This project demonstrates how to serve a React/TypeScript frontend built with Vi
 
 ## Recent Changes
 
+- Enhanced ArmsVault with functional transaction management
+  - Implemented form validation and state management
+  - Added API integration code comments
+  - Changed transaction type selection to dropdown menu
+  - Added success messaging and form reset
 - Implemented ArmsVault inventory management system
   - Added storage location management functionality
   - Added transaction management for tracking inventory movements
@@ -50,6 +55,8 @@ This project demonstrates how to serve a React/TypeScript frontend built with Vi
   - Created product detail pages for AirTrack Pro, ProcessFlow, and ArmsVault
   - Implemented client-side routing
 - Added security classification banners that change based on page content
+  - Banners change color and text based on page sensitivity
+  - Fixed position banners visible during scrolling
 - Implemented container pattern for the Go backend
   - Added go-chi for HTTP routing
   - Structured code with handlers, server, and container packages
@@ -130,7 +137,76 @@ The frontend is configured to proxy API requests to the backend server running o
 
 ## How It Works
 
-The Go backend uses the `embed` package to include the static files from the frontend build. The key part is:
+### Frontend Routing
+
+The application uses React Router for client-side routing:
+
+```jsx
+<BrowserRouter>
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/airtrack-pro" element={<AirTrackPro />} />
+    <Route path="/processflow" element={<ProcessFlow />} />
+    <Route path="/armsvault" element={<ArmsVault />} />
+  </Routes>
+</BrowserRouter>
+```
+
+Security classification banners at the top and bottom of the page automatically update based on the current route:
+
+```jsx
+const classificationMap = {
+  '/': { text: 'UNCLASSIFIED', bgColor: 'bg-green-600' },
+  '/airtrack-pro': { text: 'SECRET', bgColor: 'bg-red-600' },
+  '/processflow': { text: 'CONFIDENTIAL', bgColor: 'bg-blue-600' },
+  '/armsvault': { text: 'TOP SECRET', bgColor: 'bg-yellow-600' }
+}
+```
+
+### ArmsVault Functionality
+
+The ArmsVault page includes a complete in-browser transaction management system:
+
+- **Dashboard**: Overview of inventory status and recent transactions
+- **Storage Locations**: Management of physical storage locations
+- **Transactions**: Record and view inventory movements
+  - Support for different transaction types (Gain, Expenditure, Transfer, Other Loss)
+  - Form validation based on transaction type
+  - Success confirmation
+- **Reports**: Generate reports for inventory analysis
+
+The transaction system includes commented code for future API integration:
+
+```typescript
+// API integration
+async function handleSubmitTransaction() {
+  // Form validation
+  
+  // Create transaction object
+  
+  // API call would be here:
+  /* 
+  try {
+    const response = await fetch('/api/transactions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(transaction)
+    })
+    
+    // Handle response
+  } catch (error) {
+    // Handle error
+  }
+  */
+  
+  // Client-side state update (temporary)
+  setTransactions([newTransaction, ...transactions])
+}
+```
+
+### Backend Integration
+
+The Go backend uses the `embed` package to include the static files from the frontend build:
 
 ```go
 //go:embed dist
@@ -172,3 +248,6 @@ The container pattern allows for better separation of concerns and easier testin
 - Implement user authentication and authorization
 - Add real-time updates using WebSockets
 - Create mobile application using React Native
+- Implement inventory history and audit trails
+- Add barcode/QR code scanning capability
+- Integrate with external inventory systems
