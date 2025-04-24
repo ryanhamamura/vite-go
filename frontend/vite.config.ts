@@ -6,7 +6,7 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: resolve(__dirname, '../backend/static'),
+    outDir: resolve(__dirname, '../backend/dist'),
     emptyOutDir: true,
   },
 })

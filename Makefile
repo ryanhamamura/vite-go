@@ -12,5 +12,5 @@ run:
 	cd backend && ./server
 
 clean:
-	rm -rf backend/static
+	rm -rf backend/dist
 	rm -f backend/server
