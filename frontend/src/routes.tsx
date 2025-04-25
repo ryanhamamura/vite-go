@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import AirTrackPro from './pages/AirTrackPro'
 import ProcessFlow from './pages/ProcessFlow'
 import ArmsVault from './pages/ArmsVault'
+import Register from './pages/Register'
 
 /**
  * Application routes configuration
@@ -20,6 +21,7 @@ const AppRoutes = () => {
       <Route path="/airtrack-pro" element={<AirTrackPro />} />
       <Route path="/processflow" element={<ProcessFlow />} />
       <Route path="/armsvault" element={<ArmsVault />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   )
 }
