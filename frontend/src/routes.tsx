@@ -2,9 +2,9 @@ import { Route, Routes } from 'react-router-dom'
 
 // Pages
 import Home from './pages/Home'
-import AirTrackPro from './pages/AirTrackPro'
+import TPFDDTool from './pages/TPFDDTool'
 import ProcessFlow from './pages/ProcessFlow'
-import ArmsVault from './pages/ArmsVault'
+import MUREP from './pages/MUREP'
 import Register from './pages/Register'
 
 /**
@@ -18,9 +18,9 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/airtrack-pro" element={<AirTrackPro />} />
+      <Route path="/tpfdd" element={<TPFDDTool />} />
       <Route path="/processflow" element={<ProcessFlow />} />
-      <Route path="/armsvault" element={<ArmsVault />} />
+      <Route path="/murep" element={<MUREP />} />
       <Route path="/register" element={<Register />} />
     </Routes>
   )

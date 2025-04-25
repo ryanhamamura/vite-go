@@ -12,7 +12,7 @@ const classificationMap: Record<string, ClassificationInfo> = {
     bgColor: 'bg-green-600',
     textColor: 'text-white'
   },
-  '/airtrack-pro': {
+  '/tpfdd': {
     text: 'SECRET',
     bgColor: 'bg-red-600',
     textColor: 'text-white'
@@ -22,7 +22,7 @@ const classificationMap: Record<string, ClassificationInfo> = {
     bgColor: 'bg-blue-600',
     textColor: 'text-white'
   },
-  '/armsvault': {
+  '/murep': {
     text: 'TOP SECRET',
     bgColor: 'bg-yellow-600',
     textColor: 'text-black'

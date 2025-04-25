@@ -60,7 +60,7 @@ function Home() {
                 <li>Situational awareness dashboard</li>
               </ul>
               <div className="card-actions justify-end">
-                <Link to="/airtrack-pro" className="btn btn-primary btn-sm">Learn More</Link>
+                <Link to="/tpfdd" className="btn btn-primary btn-sm">Learn More</Link>
               </div>
             </div>
           </div>
@@ -92,7 +92,7 @@ function Home() {
                 <li>Predictive maintenance alerts</li>
               </ul>
               <div className="card-actions justify-end">
-                <Link to="/armsvault" className="btn btn-primary btn-sm">Learn More</Link>
+                <Link to="/murep" className="btn btn-primary btn-sm">Learn More</Link>
               </div>
             </div>
           </div>
