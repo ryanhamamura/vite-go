@@ -4,12 +4,43 @@ function Home() {
   return (
     <>
       {/* Hero Section */}
-      <div className="hero min-h-[70vh] bg-base-200">
-        <div className="hero-content text-center">
-          <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Log IS</h1>
-            <p className="py-6">Advanced software solutions designed for modern military logistics, operations, and inventory management challenges.</p>
-            <a href="#products" className="btn btn-primary">Explore Our Solutions</a>
+      <div className="hero min-h-[80vh] tech-gradient-bg text-white">
+        <div className="tech-grid" style={{ opacity: 0.05 }}></div>
+        
+        {/* Large product image or shape */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] opacity-30 rounded-full" 
+          style={{
+            background: 'radial-gradient(circle, rgba(103, 232, 249, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%)',
+            filter: 'blur(80px)',
+            transform: 'translate(-50%, -50%) perspective(1000px) rotateX(10deg) rotateY(10deg)',
+            zIndex: 0
+          }}>
+        </div>
+        
+        {/* Smaller accent shapes */}
+        <div className="absolute bottom-20 left-1/4 w-32 h-32 opacity-20 rounded-full"
+          style={{
+            background: 'radial-gradient(circle, rgba(103, 232, 249, 0.4) 0%, transparent 70%)',
+            filter: 'blur(10px)'
+          }}>
+        </div>
+        <div className="absolute top-40 right-1/4 w-40 h-40 opacity-20 rounded-full"
+          style={{
+            background: 'radial-gradient(circle, rgba(147, 51, 234, 0.4) 0%, transparent 70%)',
+            filter: 'blur(15px)'
+          }}>
+        </div>
+        
+        <div className="hero-content text-center z-10 mt-10">
+          <div className="max-w-2xl">
+            <h1 className="text-6xl font-bold text-white tracking-tight mb-2">Log IS</h1>
+            <p className="text-xl opacity-80 mb-8 max-w-xl mx-auto font-light">Advanced software solutions designed for modern military logistics, operations, and inventory management challenges.</p>
+            <a href="#products" className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors font-medium text-lg">
+              Explore Our Solutions
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>
