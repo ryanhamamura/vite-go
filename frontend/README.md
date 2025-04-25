@@ -9,6 +9,8 @@ This frontend is built with React, TypeScript, and Vite. It provides a modern UI
 - **Fast Development**: Vite provides lightning-fast HMR (Hot Module Replacement)
 - **Responsive Design**: Mobile-first UI that works on all device sizes
 - **Secure Backend Integration**: API client with axios for secure backend communication
+- **Authentication**: CAC/Smartcard authentication with JWT tokens
+- **Protected Routes**: Route-based access control with role permissions
 - **User Registration**: Form with validation for collecting user information
 - **MUREP Inventory System**: Manage inventory with transactions and reporting
 - **TPFDD Tool**: Transport planning and force deployment tools
@@ -16,8 +18,10 @@ This frontend is built with React, TypeScript, and Vite. It provides a modern UI
 
 ## Recent Changes
 
-- **API Integration**: Added axios-based API client architecture for backend communication
-- **User Registration**: Form with comprehensive validation and API integration
+- **Authentication System**: Added JWT-based authentication with CAC/smartcard support
+- **Protected Routes**: Implemented route protection with role-based access control
+- **API Integration**: Added axios-based API client architecture with token handling
+- **User Registration**: Form with comprehensive validation and API integration  
 - **Component Renaming**: Renamed ArmsVault to MUREP and AirTrackPro to TPFDD
 - **URL Updates**: Updated route paths to match new component names
 - **UI Enhancement**: Added Apple-inspired tech gradient background for homepage
@@ -47,9 +51,15 @@ npm run preview
 ├── src/
 │   ├── api/              # API integration
 │   │   ├── apiClient.ts  # Axios configuration and interceptors
+│   │   ├── authService.ts # Authentication methods and token handling
 │   │   └── userService.ts # User-related API methods
 │   ├── assets/           # Images and other assets
 │   ├── components/       # Reusable UI components
+│   │   ├── AuthButton.tsx # Login/logout button with auth state
+│   │   ├── LoginPrompt.tsx # CAC login prompt for protected routes
+│   │   └── ProtectedRoute.tsx # Route access control component
+│   ├── context/
+│   │   └── AuthContext.tsx # Authentication state management
 │   ├── pages/            # Page components
 │   │   ├── Home.tsx      # Landing page with techy background
 │   │   ├── MUREP.tsx     # Inventory management system
@@ -58,7 +68,7 @@ npm run preview
 │   │   └── Register.tsx  # User registration form
 │   ├── App.css           # Global styles
 │   ├── App.tsx           # App component
-│   ├── routes.tsx        # Centralized route definitions
+│   ├── routes.tsx        # Centralized route definitions with access control
 │   └── main.tsx          # App entry point
 └── vite.config.ts        # Vite configuration
 ```
@@ -93,38 +103,72 @@ The MUREP (formerly ArmsVault) system provides:
 - Reporting and analytics
 - Storage location management
 
-## Routing
+## Authentication and Protected Routes
 
-Routes are now centralized in a dedicated file:
+The application uses JWT tokens with CAC (Common Access Card) authentication:
 
 ```typescript
-// routes.tsx
+// Authentication with CAC/smartcard
+import { useAuth } from '../context/AuthContext';
+
+const LoginButton = () => {
+  const { login, isAuthenticated } = useAuth();
+  
+  const handleLogin = async () => {
+    try {
+      // This will trigger CAC selection in browser
+      await login();
+      // Handle successful login
+    } catch (error) {
+      // Handle login error
+    }
+  };
+  
+  return (
+    <button onClick={handleLogin}>
+      Login with CAC
+    </button>
+  );
+};
+```
+
+Protected routes prevent unauthorized access:
+
+```typescript
+// routes.tsx with protected routes
 import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import MUREP from './pages/MUREP';
-import TPFDDTool from './pages/TPFDDTool';
-import ProcessFlow from './pages/ProcessFlow';
-import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Public routes */}
       <Route path="/" element={<Home />} />
-      <Route path="/murep" element={<MUREP />} />
-      <Route path="/tpfdd" element={<TPFDDTool />} />
-      <Route path="/processflow" element={<ProcessFlow />} />
       <Route path="/register" element={<Register />} />
+      
+      {/* Protected routes - require authentication */}
+      <Route path="/tpfdd" element={
+        <ProtectedRoute>
+          <TPFDDTool />
+        </ProtectedRoute>
+      } />
+      
+      {/* Role-protected routes */}
+      <Route path="/processflow" element={
+        <ProtectedRoute requiredRole="admin">
+          <ProcessFlow />
+        </ProtectedRoute>
+      } />
     </Routes>
   );
 };
-
-export default AppRoutes;
 ```
 
 ## Future Enhancements
 
-- Add user authentication and authorization
+- Enhance CAC integration with certificate validation
 - Implement real-time updates with WebSockets
+- Add more granular permission controls
 - Enhance MUREP inventory system with barcode scanning
 - Add data visualization for inventory analytics
 - Implement comprehensive test coverage

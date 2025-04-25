@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { userService, UserRegistration } from '../api/userService'
+import { useAuth } from '../context/AuthContext'
 
 function Register() {
   // Form state
@@ -15,6 +16,10 @@ function Register() {
   const [errors, setErrors] = useState<{[key: string]: string}>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  
+  // Auth context and navigation
+  const { login } = useAuth()
+  const navigate = useNavigate()
   
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {}
@@ -74,15 +79,11 @@ function Register() {
           jdir
         };
         
-        // Use the real API call
+        // Register the user
         await userService.register(userData);
         
-        // userService uses axios which automatically:
-        // - Throws errors for non-2xx responses
-        // - Parses JSON responses
-        // - Handles request/response interceptors
-        
         setSubmitSuccess(true)
+        
         // Clear form
         setFirstName('')
         setLastName('')
@@ -90,6 +91,23 @@ function Register() {
         setPhone('')
         setRank('')
         setJdir('')
+        
+        // Optional: Automatically redirect to login
+        setTimeout(() => {
+          try {
+            // Try to login automatically (this will prompt for smartcard)
+            login()
+              .then(() => {
+                navigate('/')
+              })
+              .catch(err => {
+                console.error('Auto-login failed:', err)
+                // Stay on registration success page
+              })
+          } catch (error) {
+            console.error('Login attempt failed:', error)
+          }
+        }, 3000)
         
       } catch (error: any) {
         console.error('Registration error:', error)
@@ -124,7 +142,10 @@ function Register() {
                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>Registration successful! Your account has been created.</span>
+                <div>
+                  <span>Registration successful! Your account has been created.</span>
+                  <p className="text-sm mt-1">Preparing your login with CAC...</p>
+                </div>
               </div>
             )}
             
@@ -137,125 +158,127 @@ function Register() {
               </div>
             )}
             
-            <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="form-control w-full">
-                  <label className="label">
-                    <span className="label-text">First Name</span>
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="Enter your first name" 
-                    className={`input input-bordered w-full ${errors.firstName ? 'input-error' : ''}`}
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
-                  {errors.firstName && <span className="text-error text-sm mt-1">{errors.firstName}</span>}
+            {!submitSuccess && (
+              <form onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text">First Name</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter your first name" 
+                      className={`input input-bordered w-full ${errors.firstName ? 'input-error' : ''}`}
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                    {errors.firstName && <span className="text-error text-sm mt-1">{errors.firstName}</span>}
+                  </div>
+                  
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text">Last Name</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter your last name" 
+                      className={`input input-bordered w-full ${errors.lastName ? 'input-error' : ''}`}
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                    {errors.lastName && <span className="text-error text-sm mt-1">{errors.lastName}</span>}
+                  </div>
                 </div>
                 
-                <div className="form-control w-full">
+                <div className="form-control w-full mb-4">
                   <label className="label">
-                    <span className="label-text">Last Name</span>
+                    <span className="label-text">Email</span>
                   </label>
                   <input 
-                    type="text" 
-                    placeholder="Enter your last name" 
-                    className={`input input-bordered w-full ${errors.lastName ? 'input-error' : ''}`}
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    type="email" 
+                    placeholder="Enter your email address" 
+                    className={`input input-bordered w-full ${errors.email ? 'input-error' : ''}`}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
-                  {errors.lastName && <span className="text-error text-sm mt-1">{errors.lastName}</span>}
+                  {errors.email && <span className="text-error text-sm mt-1">{errors.email}</span>}
                 </div>
-              </div>
-              
-              <div className="form-control w-full mb-4">
-                <label className="label">
-                  <span className="label-text">Email</span>
-                </label>
-                <input 
-                  type="email" 
-                  placeholder="Enter your email address" 
-                  className={`input input-bordered w-full ${errors.email ? 'input-error' : ''}`}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                {errors.email && <span className="text-error text-sm mt-1">{errors.email}</span>}
-              </div>
-              
-              <div className="form-control w-full mb-4">
-                <label className="label">
-                  <span className="label-text">Phone Number</span>
-                </label>
-                <input 
-                  type="tel" 
-                  placeholder="Enter your phone number" 
-                  className={`input input-bordered w-full ${errors.phone ? 'input-error' : ''}`}
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                />
-                {errors.phone && <span className="text-error text-sm mt-1">{errors.phone}</span>}
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="form-control w-full">
+                
+                <div className="form-control w-full mb-4">
                   <label className="label">
-                    <span className="label-text">Rank</span>
+                    <span className="label-text">Phone Number</span>
                   </label>
-                  <select 
-                    className={`select select-bordered w-full ${errors.rank ? 'select-error' : ''}`}
-                    value={rank}
-                    onChange={(e) => setRank(e.target.value)}
+                  <input 
+                    type="tel" 
+                    placeholder="Enter your phone number" 
+                    className={`input input-bordered w-full ${errors.phone ? 'input-error' : ''}`}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                  {errors.phone && <span className="text-error text-sm mt-1">{errors.phone}</span>}
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text">Rank</span>
+                    </label>
+                    <select 
+                      className={`select select-bordered w-full ${errors.rank ? 'select-error' : ''}`}
+                      value={rank}
+                      onChange={(e) => setRank(e.target.value)}
+                    >
+                      <option value="" disabled>Select your rank</option>
+                      <option value="Amn">Amn</option>
+                      <option value="A1C">A1C</option>
+                      <option value="SrA">SrA</option>
+                      <option value="SSgt">SSgt</option>
+                      <option value="TSgt">TSgt</option>
+                      <option value="MSgt">MSgt</option>
+                      <option value="SMSgt">SMSgt</option>
+                      <option value="CMSgt">CMSgt</option>
+                      <option value="2Lt">2Lt</option>
+                      <option value="1Lt">1Lt</option>
+                      <option value="Capt">Capt</option>
+                      <option value="Maj">Maj</option>
+                      <option value="Lt Col">Lt Col</option>
+                      <option value="Col">Col</option>
+                      <option value="Brig Gen">Brig Gen</option>
+                      <option value="Maj Gen">Maj Gen</option>
+                      <option value="Lt Gen">Lt Gen</option>
+                      <option value="Gen">Gen</option>
+                      <option value="Civilian">Civilian</option>
+                      <option value="Contractor">Contractor</option>
+                    </select>
+                    {errors.rank && <span className="text-error text-sm mt-1">{errors.rank}</span>}
+                  </div>
+                  
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text">JDIR</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      placeholder="Enter your JDIR" 
+                      className={`input input-bordered w-full ${errors.jdir ? 'input-error' : ''}`}
+                      value={jdir}
+                      onChange={(e) => setJdir(e.target.value)}
+                    />
+                    {errors.jdir && <span className="text-error text-sm mt-1">{errors.jdir}</span>}
+                  </div>
+                </div>
+                
+                <div className="form-control">
+                  <button 
+                    type="submit" 
+                    className={`btn btn-primary ${isSubmitting ? 'loading' : ''}`}
+                    disabled={isSubmitting}
                   >
-                    <option value="" disabled>Select your rank</option>
-                    <option value="Amn">Amn</option>
-                    <option value="A1C">A1C</option>
-                    <option value="SrA">SrA</option>
-                    <option value="SSgt">SSgt</option>
-                    <option value="TSgt">TSgt</option>
-                    <option value="MSgt">MSgt</option>
-                    <option value="SMSgt">SMSgt</option>
-                    <option value="CMSgt">CMSgt</option>
-                    <option value="2Lt">2Lt</option>
-                    <option value="1Lt">1Lt</option>
-                    <option value="Capt">Capt</option>
-                    <option value="Maj">Maj</option>
-                    <option value="Lt Col">Lt Col</option>
-                    <option value="Col">Col</option>
-                    <option value="Brig Gen">Brig Gen</option>
-                    <option value="Maj Gen">Maj Gen</option>
-                    <option value="Lt Gen">Lt Gen</option>
-                    <option value="Gen">Gen</option>
-                    <option value="Civilian">Civilian</option>
-                    <option value="Contractor">Contractor</option>
-                  </select>
-                  {errors.rank && <span className="text-error text-sm mt-1">{errors.rank}</span>}
+                    {isSubmitting ? 'Submitting...' : 'Register'}
+                  </button>
                 </div>
-                
-                <div className="form-control w-full">
-                  <label className="label">
-                    <span className="label-text">JDIR</span>
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="Enter your JDIR" 
-                    className={`input input-bordered w-full ${errors.jdir ? 'input-error' : ''}`}
-                    value={jdir}
-                    onChange={(e) => setJdir(e.target.value)}
-                  />
-                  {errors.jdir && <span className="text-error text-sm mt-1">{errors.jdir}</span>}
-                </div>
-              </div>
-              
-              <div className="form-control">
-                <button 
-                  type="submit" 
-                  className={`btn btn-primary ${isSubmitting ? 'loading' : ''}`}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Submitting...' : 'Register'}
-                </button>
-              </div>
-            </form>
+              </form>
+            )}
           </div>
         </div>
       </div>

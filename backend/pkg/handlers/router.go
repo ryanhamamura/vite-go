@@ -19,8 +19,17 @@ func NewRouter(staticFiles embed.FS) http.Handler {
 
 	// API routes
 	r.Route("/api", func(r chi.Router) {
+		// User registration
 		r.Post("/register", RegisterUser)
-		// Add more API routes here
+		
+		// Authentication
+		r.Route("/auth", func(r chi.Router) {
+			r.Post("/login", SmartcardLogin)
+			r.Post("/logout", Logout)
+			r.Post("/refresh", RefreshToken)
+			r.Get("/me", GetCurrentUser)
+			r.Get("/cert-status", CertificateStatus)
+		})
 	})
 
 	// Setup static file serving
