@@ -17,13 +17,19 @@ func NewRouter(staticFiles embed.FS) http.Handler {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
+	// API routes
+	r.Route("/api", func(r chi.Router) {
+		r.Post("/register", RegisterUser)
+		// Add more API routes here
+	})
+
 	// Setup static file serving
 	fsys, err := fs.Sub(staticFiles, "dist")
 	if err != nil {
 		panic(err)
 	}
 
-	// Static files route
+	// Static files route - must be last
 	r.Handle("/*", http.FileServer(http.FS(fsys)))
 
 	return r

@@ -1,54 +1,130 @@
-# React + TypeScript + Vite
+# Vite-Go Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This frontend is built with React, TypeScript, and Vite. It provides a modern UI for the Vite-Go application with a focus on dynamic user interaction and responsive design.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Modern UI**: Built with React 19 and styled with TailwindCSS and DaisyUI
+- **Type Safety**: Full TypeScript support for better developer experience
+- **Fast Development**: Vite provides lightning-fast HMR (Hot Module Replacement)
+- **Responsive Design**: Mobile-first UI that works on all device sizes
+- **Secure Backend Integration**: API client with axios for secure backend communication
+- **User Registration**: Form with validation for collecting user information
+- **MUREP Inventory System**: Manage inventory with transactions and reporting
+- **TPFDD Tool**: Transport planning and force deployment tools
+- **Process Flow Management**: Visual process flow diagrams and tracking
 
-## Expanding the ESLint configuration
+## Recent Changes
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **API Integration**: Added axios-based API client architecture for backend communication
+- **User Registration**: Form with comprehensive validation and API integration
+- **Component Renaming**: Renamed ArmsVault to MUREP and AirTrackPro to TPFDD
+- **URL Updates**: Updated route paths to match new component names
+- **UI Enhancement**: Added Apple-inspired tech gradient background for homepage
+- **Route Organization**: Moved routes to a separate file for better code organization
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
 ```
+/frontend
+├── public/               # Static assets
+├── src/
+│   ├── api/              # API integration
+│   │   ├── apiClient.ts  # Axios configuration and interceptors
+│   │   └── userService.ts # User-related API methods
+│   ├── assets/           # Images and other assets
+│   ├── components/       # Reusable UI components
+│   ├── pages/            # Page components
+│   │   ├── Home.tsx      # Landing page with techy background
+│   │   ├── MUREP.tsx     # Inventory management system
+│   │   ├── TPFDDTool.tsx # Transport planning tools
+│   │   ├── ProcessFlow.tsx # Process flow visualization
+│   │   └── Register.tsx  # User registration form
+│   ├── App.css           # Global styles
+│   ├── App.tsx           # App component
+│   ├── routes.tsx        # Centralized route definitions
+│   └── main.tsx          # App entry point
+└── vite.config.ts        # Vite configuration
+```
+
+## API Integration
+
+The frontend uses axios for API communication:
+
+```typescript
+// Example API call using the user service
+import { userService } from '../api/userService';
+
+// Register a new user
+const registerUser = async (userData) => {
+  try {
+    const response = await userService.register(userData);
+    console.log('User registered successfully:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Registration failed:', error);
+    throw error;
+  }
+};
+```
+
+## MUREP Functionality
+
+The MUREP (formerly ArmsVault) system provides:
+
+- Inventory tracking across multiple locations
+- Transaction management (gains, expenditures, transfers)
+- Reporting and analytics
+- Storage location management
+
+## Routing
+
+Routes are now centralized in a dedicated file:
+
+```typescript
+// routes.tsx
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import MUREP from './pages/MUREP';
+import TPFDDTool from './pages/TPFDDTool';
+import ProcessFlow from './pages/ProcessFlow';
+import Register from './pages/Register';
+
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/murep" element={<MUREP />} />
+      <Route path="/tpfdd" element={<TPFDDTool />} />
+      <Route path="/processflow" element={<ProcessFlow />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
+  );
+};
+
+export default AppRoutes;
+```
+
+## Future Enhancements
+
+- Add user authentication and authorization
+- Implement real-time updates with WebSockets
+- Enhance MUREP inventory system with barcode scanning
+- Add data visualization for inventory analytics
+- Implement comprehensive test coverage

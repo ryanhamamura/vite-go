@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react'
+import { useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 
 // Types
@@ -155,7 +155,7 @@ function MUREP() {
   // Transaction state
   const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions)
   const [nextTransactionId, setNextTransactionId] = useState(5)
-  const [isLoading, setIsLoading] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false) // Uncomment when API is implemented
   
   // Transaction form state
   const [formDate, setFormDate] = useState<string>(new Date().toISOString().split('T')[0])

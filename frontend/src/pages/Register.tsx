@@ -1,5 +1,6 @@
 import { useState, FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { userService, UserRegistration } from '../api/userService'
 
 function Register() {
   // Form state
@@ -64,31 +65,22 @@ function Register() {
       setIsSubmitting(true)
       
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        const userData: UserRegistration = {
+          firstName,
+          lastName,
+          email,
+          phone,
+          rank,
+          jdir
+        };
         
-        // In a real application, you would make an API request here
-        /*
-        const response = await fetch('/api/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            firstName,
-            lastName,
-            email,
-            phone,
-            rank,
-            jdir
-          }),
-        })
+        // Use the real API call
+        await userService.register(userData);
         
-        if (!response.ok) {
-          const data = await response.json()
-          throw new Error(data.message || 'Registration failed')
-        }
-        */
+        // userService uses axios which automatically:
+        // - Throws errors for non-2xx responses
+        // - Parses JSON responses
+        // - Handles request/response interceptors
         
         setSubmitSuccess(true)
         // Clear form
@@ -99,10 +91,13 @@ function Register() {
         setRank('')
         setJdir('')
         
-      } catch (error) {
+      } catch (error: any) {
         console.error('Registration error:', error)
+        // Handle error message from axios error via apiClient
+        const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
+          
         setErrors({
-          form: 'Registration failed. Please try again.'
+          form: errorMessage
         })
       } finally {
         setIsSubmitting(false)
