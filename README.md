@@ -28,7 +28,8 @@ This project demonstrates how to serve a React/TypeScript frontend built with Vi
 - **Security Classification Banners**: Dynamic banners that change based on page content
 - **Responsive Design**: Works on mobile, tablet, and desktop devices
 - **Dark/Light Mode Toggle**: User-selectable theme
-- **ArmsVault Inventory Management**:
+- **User Registration**: Form for collecting user information
+- **MUREP Inventory Management**:
   - Dashboard overview with key metrics
   - Storage location management
   - Transaction tracking (gains, expenditures, transfers)
@@ -42,18 +43,23 @@ This project demonstrates how to serve a React/TypeScript frontend built with Vi
 
 ## Recent Changes
 
-- Enhanced ArmsVault with functional transaction management
+- Added user registration page with rank and JDIR fields
+- Renamed components and URLs for standardization:
+  - AirTrackPro → TPFDDTool (accessed via /tpfdd)
+  - ArmsVault → MUREP (accessed via /murep)
+- Enhanced MUREP with functional transaction management
   - Implemented form validation and state management
   - Added API integration code comments
   - Changed transaction type selection to dropdown menu
   - Added success messaging and form reset
-- Implemented ArmsVault inventory management system
+- Implemented MUREP inventory management system
   - Added storage location management functionality
   - Added transaction management for tracking inventory movements
   - Added reporting system for inventory analysis
 - Added React Router for multi-page navigation
-  - Created product detail pages for AirTrack Pro, ProcessFlow, and ArmsVault
+  - Created product detail pages for TPFDD, ProcessFlow, and MUREP
   - Implemented client-side routing
+  - Refactored routes into a separate routes.tsx file
 - Added security classification banners that change based on page content
   - Banners change color and text based on page sensitivity
   - Fixed position banners visible during scrolling
@@ -141,31 +147,51 @@ The frontend is configured to proxy API requests to the backend server running o
 
 The application uses React Router for client-side routing:
 
-```jsx
-<BrowserRouter>
-  <Routes>
-    <Route path="/" element={<Home />} />
-    <Route path="/airtrack-pro" element={<AirTrackPro />} />
-    <Route path="/processflow" element={<ProcessFlow />} />
-    <Route path="/armsvault" element={<ArmsVault />} />
-  </Routes>
-</BrowserRouter>
+```tsx
+// routes.tsx
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/tpfdd" element={<TPFDDTool />} />
+      <Route path="/processflow" element={<ProcessFlow />} />
+      <Route path="/murep" element={<MUREP />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
+  )
+}
 ```
 
 Security classification banners at the top and bottom of the page automatically update based on the current route:
 
-```jsx
-const classificationMap = {
-  '/': { text: 'UNCLASSIFIED', bgColor: 'bg-green-600' },
-  '/airtrack-pro': { text: 'SECRET', bgColor: 'bg-red-600' },
-  '/processflow': { text: 'CONFIDENTIAL', bgColor: 'bg-blue-600' },
-  '/armsvault': { text: 'TOP SECRET', bgColor: 'bg-yellow-600' }
+```tsx
+const classificationMap: Record<string, ClassificationInfo> = {
+  '/': { 
+    text: 'UNCLASSIFIED', 
+    bgColor: 'bg-green-600',
+    textColor: 'text-white'
+  },
+  '/tpfdd': {
+    text: 'SECRET',
+    bgColor: 'bg-red-600',
+    textColor: 'text-white'
+  },
+  '/processflow': {
+    text: 'CONFIDENTIAL',
+    bgColor: 'bg-blue-600',
+    textColor: 'text-white'
+  },
+  '/murep': {
+    text: 'TOP SECRET',
+    bgColor: 'bg-yellow-600',
+    textColor: 'text-black'
+  }
 }
 ```
 
-### ArmsVault Functionality
+### MUREP Functionality
 
-The ArmsVault page includes a complete in-browser transaction management system:
+The MUREP page includes a complete in-browser transaction management system:
 
 - **Dashboard**: Overview of inventory status and recent transactions
 - **Storage Locations**: Management of physical storage locations
@@ -244,8 +270,8 @@ The container pattern allows for better separation of concerns and easier testin
 
 ## Future Enhancements
 
-- Add backend API endpoints for ArmsVault data persistence
-- Implement user authentication and authorization
+- Add backend API endpoints for MUREP data persistence
+- Expand user registration with authentication and authorization
 - Add real-time updates using WebSockets
 - Create mobile application using React Native
 - Implement inventory history and audit trails
