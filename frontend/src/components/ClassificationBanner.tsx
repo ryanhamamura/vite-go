@@ -12,6 +12,11 @@ const classificationMap: Record<string, ClassificationInfo> = {
     bgColor: 'bg-green-600',
     textColor: 'text-white'
   },
+  '/contact': {
+    text: 'UNCLASSIFIED',
+    bgColor: 'bg-green-600',
+    textColor: 'text-white'
+  },
   '/tpfdd': {
     text: 'SECRET',
     bgColor: 'bg-red-600',

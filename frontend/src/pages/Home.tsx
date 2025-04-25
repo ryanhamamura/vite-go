@@ -49,7 +49,13 @@ function Home() {
       <div className="py-12" id="products">
         <h2 className="text-3xl font-bold text-center mb-8">Our Products</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 container mx-auto px-4">
-          <div className="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+          <div className="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
+            {/* Coming Soon Overlay */}
+            <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-10">
+              <div className="bg-primary text-primary-content px-4 py-2 rounded-md font-bold text-lg transform -rotate-12">
+                COMING SOON
+              </div>
+            </div>
             <div className="card-body">
               <h2 className="card-title">TPFDD</h2>
               <p className="flex-grow">Advanced airlift package tracking and analytics system designed for military logistics operations.</p>
@@ -60,12 +66,19 @@ function Home() {
                 <li>Situational awareness dashboard</li>
               </ul>
               <div className="card-actions justify-end">
-                <Link to="/tpfdd" className="btn btn-primary btn-sm">Learn More</Link>
+                {/* <Link to="/tpfdd" className="btn btn-primary btn-sm">Learn More</Link> */}
+                <button className="btn btn-primary btn-sm" disabled>Learn More</button>
               </div>
             </div>
           </div>
           
-          <div className="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+          <div className="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
+            {/* Coming Soon Overlay */}
+            <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-10">
+              <div className="bg-primary text-primary-content px-4 py-2 rounded-md font-bold text-lg transform -rotate-12">
+                COMING SOON
+              </div>
+            </div>
             <div className="card-body">
               <h2 className="card-title">ProcessFlow</h2>
               <p className="flex-grow">Comprehensive process map builder and task management system for streamlined military operations.</p>
@@ -76,12 +89,19 @@ function Home() {
                 <li>Cross-team coordination tools</li>
               </ul>
               <div className="card-actions justify-end">
-                <Link to="/processflow" className="btn btn-primary btn-sm">Learn More</Link>
+                {/* <Link to="/processflow" className="btn btn-primary btn-sm">Learn More</Link> */}
+                <button className="btn btn-primary btn-sm" disabled>Learn More</button>
               </div>
             </div>
           </div>
           
-          <div className="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+          <div className="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
+            {/* Coming Soon Overlay */}
+            <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-10">
+              <div className="bg-primary text-primary-content px-4 py-2 rounded-md font-bold text-lg transform -rotate-12">
+                COMING SOON
+              </div>
+            </div>
             <div className="card-body">
               <h2 className="card-title">MUREP</h2>
               <p className="flex-grow">Secure munitions inventory management system with advanced tracking and reporting capabilities.</p>
@@ -92,7 +112,8 @@ function Home() {
                 <li>Predictive maintenance alerts</li>
               </ul>
               <div className="card-actions justify-end">
-                <Link to="/murep" className="btn btn-primary btn-sm">Learn More</Link>
+                {/* <Link to="/murep" className="btn btn-primary btn-sm">Learn More</Link> */}
+                <button className="btn btn-primary btn-sm" disabled>Learn More</button>
               </div>
             </div>
           </div>

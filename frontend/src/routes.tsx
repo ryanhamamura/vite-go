@@ -6,6 +6,7 @@ import TPFDDTool from './pages/TPFDDTool'
 import ProcessFlow from './pages/ProcessFlow'
 import MUREP from './pages/MUREP'
 import Register from './pages/Register'
+import Contact from './pages/Contact'
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute'
@@ -23,6 +24,7 @@ const AppRoutes = () => {
       {/* Public routes - accessible to all users */}
       <Route path="/" element={<Home />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/contact" element={<Contact />} />
       
       {/* Protected routes - requires authentication */}
       <Route 

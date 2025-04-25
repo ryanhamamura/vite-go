@@ -41,13 +41,13 @@ function App() {
                 <li>
                   <a>Products</a>
                   <ul className="p-2">
-                    <li><Link to="/tpfdd">TPFDD</Link></li>
-                    <li><Link to="/processflow">ProcessFlow</Link></li>
-                    <li><Link to="/murep">MUREP</Link></li>
+                    <li><span className="opacity-60 flex items-center gap-2">TPFDD <span className="badge badge-sm">Coming Soon</span></span></li>
+                    <li><span className="opacity-60 flex items-center gap-2">ProcessFlow <span className="badge badge-sm">Coming Soon</span></span></li>
+                    <li><span className="opacity-60 flex items-center gap-2">MUREP <span className="badge badge-sm">Coming Soon</span></span></li>
                   </ul>
                 </li>
                 <li><a>About</a></li>
-                <li><a>Contact</a></li>
+                <li><Link to="/contact">Contact</Link></li>
               </ul>
             </div>
             <Link to="/" className="btn btn-ghost text-xl">Log IS</Link>
@@ -59,14 +59,14 @@ function App() {
                 <details>
                   <summary>Products</summary>
                   <ul className="p-2">
-                    <li><Link to="/tpfdd">TPFDD</Link></li>
-                    <li><Link to="/processflow">ProcessFlow</Link></li>
-                    <li><Link to="/murep">MUREP</Link></li>
+                    <li><span className="opacity-60 flex items-center gap-2">TPFDD <span className="badge badge-sm">Coming Soon</span></span></li>
+                    <li><span className="opacity-60 flex items-center gap-2">ProcessFlow <span className="badge badge-sm">Coming Soon</span></span></li>
+                    <li><span className="opacity-60 flex items-center gap-2">MUREP <span className="badge badge-sm">Coming Soon</span></span></li>
                   </ul>
                 </details>
               </li>
               <li><a>About</a></li>
-              <li><a>Contact</a></li>
+              <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>
           <div className="navbar-end">
@@ -92,14 +92,14 @@ function App() {
           </aside> 
           <nav>
             <header className="footer-title">Products</header> 
-            <Link to="/tpfdd" className="link link-hover">TPFDD</Link> 
-            <Link to="/processflow" className="link link-hover">ProcessFlow</Link> 
-            <Link to="/murep" className="link link-hover">MUREP</Link> 
+            <span className="flex items-center gap-2">TPFDD <span className="badge badge-sm">Coming Soon</span></span>
+            <span className="flex items-center gap-2">ProcessFlow <span className="badge badge-sm">Coming Soon</span></span>
+            <span className="flex items-center gap-2">MUREP <span className="badge badge-sm">Coming Soon</span></span>
           </nav> 
           <nav>
             <header className="footer-title">Company</header> 
             <a className="link link-hover">About</a> 
-            <a className="link link-hover">Contact</a>
+            <Link to="/contact" className="link link-hover">Contact</Link>
             <a className="link link-hover">Careers</a>
           </nav> 
           <nav>
