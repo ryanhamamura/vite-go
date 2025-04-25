@@ -38,9 +38,9 @@ function App() {
                 <li>
                   <a>Products</a>
                   <ul className="p-2">
-                    <li><Link to="/airtrack-pro">AirTrack Pro</Link></li>
+                    <li><Link to="/airtrack-pro">TPFDD</Link></li>
                     <li><Link to="/processflow">ProcessFlow</Link></li>
-                    <li><Link to="/armsvault">ArmsVault</Link></li>
+                    <li><Link to="/armsvault">MUREP</Link></li>
                   </ul>
                 </li>
                 <li><a>About</a></li>
@@ -56,9 +56,9 @@ function App() {
                 <details>
                   <summary>Products</summary>
                   <ul className="p-2">
-                    <li><Link to="/airtrack-pro">AirTrack Pro</Link></li>
+                    <li><Link to="/airtrack-pro">TPFDD</Link></li>
                     <li><Link to="/processflow">ProcessFlow</Link></li>
-                    <li><Link to="/armsvault">ArmsVault</Link></li>
+                    <li><Link to="/armsvault">MUREP</Link></li>
                   </ul>
                 </details>
               </li>
@@ -89,9 +89,9 @@ function App() {
           </aside> 
           <nav>
             <header className="footer-title">Products</header> 
-            <Link to="/airtrack-pro" className="link link-hover">AirTrack Pro</Link> 
+            <Link to="/airtrack-pro" className="link link-hover">TPFDD</Link> 
             <Link to="/processflow" className="link link-hover">ProcessFlow</Link> 
-            <Link to="/armsvault" className="link link-hover">ArmsVault</Link> 
+            <Link to="/armsvault" className="link link-hover">MUREP</Link> 
           </nav> 
           <nav>
             <header className="footer-title">Company</header> 

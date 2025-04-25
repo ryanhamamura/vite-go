@@ -317,7 +317,7 @@ function ArmsVault() {
       <div className="text-sm breadcrumbs mb-6">
         <ul>
           <li><Link to="/">Home</Link></li>
-          <li>ArmsVault</li>
+          <li>MUREP</li>
         </ul>
       </div>
 
@@ -325,7 +325,7 @@ function ArmsVault() {
         {/* Left Sidebar */}
         <div className="lg:w-1/4">
           <div className="bg-base-200 p-4 rounded-lg shadow-lg mb-6">
-            <h2 className="text-xl font-bold mb-4">ArmsVault</h2>
+            <h2 className="text-xl font-bold mb-4">MUREP</h2>
             <div className="flex flex-col gap-2">
               <button 
                 className={`btn ${activeTab === 'overview' ? 'btn-primary' : 'btn-ghost'} justify-start`}
@@ -395,7 +395,7 @@ function ArmsVault() {
           {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div>
-              <h1 className="text-3xl font-bold mb-6">ArmsVault Dashboard</h1>
+              <h1 className="text-3xl font-bold mb-6">MUREP Dashboard</h1>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div className="stat bg-primary text-primary-content rounded-box">

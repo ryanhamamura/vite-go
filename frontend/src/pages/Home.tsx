@@ -51,7 +51,7 @@ function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 container mx-auto px-4">
           <div className="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow duration-300">
             <div className="card-body">
-              <h2 className="card-title">AirTrack Pro</h2>
+              <h2 className="card-title">TPFDD</h2>
               <p className="flex-grow">Advanced airlift package tracking and analytics system designed for military logistics operations.</p>
               <ul className="list-disc list-inside mb-4 text-sm opacity-75">
                 <li>Real-time package monitoring</li>
@@ -83,7 +83,7 @@ function Home() {
           
           <div className="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow duration-300">
             <div className="card-body">
-              <h2 className="card-title">ArmsVault</h2>
+              <h2 className="card-title">MUREP</h2>
               <p className="flex-grow">Secure munitions inventory management system with advanced tracking and reporting capabilities.</p>
               <ul className="list-disc list-inside mb-4 text-sm opacity-75">
                 <li>Real-time inventory monitoring</li>
