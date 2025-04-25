@@ -1,15 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './App.css'
-
-// Pages
-import Home from './pages/Home'
-import AirTrackPro from './pages/AirTrackPro'
-import ProcessFlow from './pages/ProcessFlow'
-import ArmsVault from './pages/ArmsVault'
 
 // Components
 import ClassificationBanner from './components/ClassificationBanner'
+import AppRoutes from './routes'
 
 function App() {
   const [theme, setTheme] = useState('custom')
@@ -83,12 +78,7 @@ function App() {
 
         {/* Page Content */}
         <div className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/airtrack-pro" element={<AirTrackPro />} />
-            <Route path="/processflow" element={<ProcessFlow />} />
-            <Route path="/armsvault" element={<ArmsVault />} />
-          </Routes>
+          <AppRoutes />
         </div>
 
         {/* Footer */}
